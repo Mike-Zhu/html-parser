@@ -1,4 +1,4 @@
-const { tokenizer, parser, toText } = require("./htmlComplier")
+const { tokenizer, parser, toText } = require("./src")
 const util = require('util')
 let lispStr = `<html lang="en" class="octotree"><head>
 <meta charset="utf-8">
