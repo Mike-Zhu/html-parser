@@ -1599,7 +1599,7 @@ You can’t perform that action at this time.
 <div class="ui-resizable-handle ui-resizable-e" style="z-index: 90;"></div></nav></body></html>`
 let code = tokenizer(lispStr)
 console.log(util.inspect(code, { showHidden: false, depth: null }))
-let ast = parser(code)
-let text = toText(ast)
+// let ast = parser(code)
+// let text = toText(ast)
 
-console.log({ text })
+// console.log({ text })

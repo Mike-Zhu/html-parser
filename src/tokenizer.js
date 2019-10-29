@@ -165,6 +165,7 @@ function dealWith(input) {
       })
     }
     // 最后如果我们没有匹配上任何类型的 token，那么我们抛出一个错误。
+    console.log("input is =>", input)
     throw new TypeError('I dont know what this character is: ' + char + "index is " + current + " type is " + type);
   }
   return tokens

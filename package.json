@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "promises-aplus-tests test/adapter"
+    "test": "node testHtml"
   },
   "author": "",
   "license": "ISC",
