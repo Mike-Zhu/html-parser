@@ -17,6 +17,8 @@ let {
   many,
   many1
 } = require('./util')
+let delNotes = require('./delNotes')
+let addEndTag = require('./addEndTag')
 
 const ignoreFirst = (first, second) => applyAll(inject(_ => value => value), first, second)
 
@@ -53,7 +55,7 @@ const prop_val = oneOf(
 )
 
 const prop = map(
-  oneOf(
+  either(
     applyAll(
       inject(name => _ => val => [name, val]),
       many(name_letter),
@@ -88,11 +90,7 @@ const closeTag = applyAll(
   many(lower),
   char(">")
 )
-const tagContent = source => oneOf(
-  aroundBySpace(notes),
-  text,
-  aroundBySpace(tag)
-)(source)
+const tagContent = source => either(text, aroundBySpace(tag))(source)
 
 const text_val = many1(
   oneOf(
@@ -141,34 +139,12 @@ const normalTag = map(
   ), tagCb
 )
 
-const tag = oneOf(selfCloseTag, normalTag, openTag)
+const tag = either(selfCloseTag, normalTag)
 
-const note_start = applyAll(
-  inject(_1 => _2 => _3 => _4 => ''),
-  char('<'),
-  char('!'),
-  char('-'),
-  char('-')
-)
-
-const note_end = applyAll(
-  inject(_1 => _2 => _3 => _4 => ''),
-  char('-'),
-  char('-'),
-  char('>')
-)
-const note_val = many(not(note_end))
-
-const notes = applyAll(
-  inject(_1 => val => _3 => val),
-  note_start,
-  note_val,
-  note_end,
-)
-
-let tagValue =
-  `<!-- .sticky312header -->`
-
-console.log('notes', JSON.stringify(
-  notes(tagValue)
-))
+module.exports = {
+  tag,
+  many,
+  delNotes,
+  addEndTag,
+  normalTag
+}

@@ -90,7 +90,7 @@ const many1 = parser => source => {
   let result = many(parser)(source)
   if (isFailed(result)) return result
   let [list, rest_source] = result
-  if (list.length === 0) return `At least match once`
+  if (list.length === 0) return `At least match once ${rest_source}`
   return [list, rest_source]
 }
 
