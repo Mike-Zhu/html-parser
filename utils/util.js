@@ -34,7 +34,7 @@ const satisfy = predicate => source => {
   if (isFailed(result)) return result
   let [char, rest_source] = result
   if (!predicate(char)) {
-    return `unexpect char ${char}`
+    return `unexpect char ${char} => ${rest_source}`
   }
   return [char, rest_source]
 }
@@ -42,6 +42,7 @@ const satisfy = predicate => source => {
 const digit = satisfy(c => c >= "0" && c <= "9")
 const lower = satisfy(c => c >= "a" && c <= "z")
 const uppper = satisfy(c => c >= "A" && c <= "Z")
+const character = satisfy(c => c >= "\u4e00" && c <= "\u9fa5")
 const char = target => satisfy(c => c === target)
 const not = target => satisfy(c => c !== target)
 
@@ -90,7 +91,7 @@ const many1 = parser => source => {
   let result = many(parser)(source)
   if (isFailed(result)) return result
   let [list, rest_source] = result
-  if (list.length === 0) return `At least match once ${rest_source}`
+  if (list.length === 0) return `At least match once =>${rest_source}`
   return [list, rest_source]
 }
 
@@ -102,6 +103,7 @@ module.exports = {
   apply,
   applyAll,
   satisfy,
+  character,
   whiteSpace,
   digit,
   lower,

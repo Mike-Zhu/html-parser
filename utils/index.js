@@ -1,6 +1,6 @@
 let {
   first,
-  isFailed,
+  character,
   inject,
   map,
   apply,
@@ -44,14 +44,13 @@ const aroundBy = (parser, surround) =>
 const aroundBySpace = parser => aroundBy(parser, whiteSpace)
 
 const name_letter = oneOf(uppper, lower, digit, char("-"), char("_"))
-const prop_val = oneOf(
+const prop_val = either(
   bracket(
     char(`"`),
     many(not(`"`)),
     char(`"`)
   ),
-  bracket(char(`'`), many(not(`'`), char(`'`))),
-  many(not(whiteSpace))
+  bracket(char(`'`), many(not(`'`), char(`'`)))
 )
 
 const prop = map(
@@ -90,7 +89,7 @@ const closeTag = applyAll(
   many(lower),
   char(">")
 )
-const tagContent = source => either(text, aroundBySpace(tag))(source)
+const tagContent = source => oneOf(text, tag)(source)
 
 const text_val = many1(
   oneOf(
@@ -99,7 +98,8 @@ const text_val = many1(
     digit,
     char("-"),
     char("_"),
-    whiteSpace
+    whiteSpace,
+    character
   )
 )
 const text = map(text_val, list => list.join(""))
@@ -133,9 +133,9 @@ const tagCb = list => {
 const normalTag = map(
   applyAll(
     inject(tagName => content => _ => [tagName, content]),
-    openTag,
+    aroundBySpace(openTag),
     either(many1(tagContent), inject([])),
-    many1(closeTag),
+    aroundBySpace(closeTag),
   ), tagCb
 )
 
@@ -145,6 +145,5 @@ module.exports = {
   tag,
   many,
   delNotes,
-  addEndTag,
-  normalTag
+  addEndTag
 }
